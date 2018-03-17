@@ -19,16 +19,6 @@ Coordinate.Orientation = {
     PointyTop = 1,
 }
 
--- Offsets used for calculating axial neighbors.
-local NEIGHBOR_OFFSETS = {
-    Coordinate.new(-1,  0),
-    Coordinate.new( 1,  0),
-    Coordinate.new(-1,  1),
-    Coordinate.new( 1, -1),
-    Coordinate.new( 0,  1),
-    Coordinate.new( 0, -1),
-}
-
 --[[
     Creates a new Coordinate from a given q and r.
     q (integer): The Q coordinate of the pair.
@@ -41,7 +31,7 @@ function Coordinate.new(q, r)
     return setmetatable({
         Q = q,
         R = r,
-    })
+    }, Coordinate)
 end
 
 --[[
@@ -130,5 +120,16 @@ function Coordinate:ToWorldPosition(orientation)
 
     return x, y
 end
+
+-- Offsets used for calculating axial neighbors.
+-- Declared here for scoping reasons.
+local NEIGHBOR_OFFSETS = {
+    Coordinate.new(-1,  0),
+    Coordinate.new( 1,  0),
+    Coordinate.new(-1,  1),
+    Coordinate.new( 1, -1),
+    Coordinate.new( 0,  1),
+    Coordinate.new( 0, -1),
+}
 
 return Coordinate
