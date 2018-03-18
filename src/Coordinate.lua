@@ -66,10 +66,10 @@ function Coordinate.fromWorldPosition(x, y, orientation, hexSize)
     local hexX, hexZ
 
     if orientation == Coordinate.Orientation.PointyTop then
-        hexX = (x * math.sqrt(3) / 3 - y / 3) / hexSize,
+        hexX = (x * math.sqrt(3) / 3 - y / 3) / hexSize
         hexZ = y * 2 / 3 / hexSize
     elseif orientation == Coordinate.Orientation.FlatTop then
-        hexX = x * 2 / 3 / hexSize,
+        hexX = x * 2 / 3 / hexSize
         hexZ = (-x / 3 + math.sqrt(3) / 3 * y) / hexSize
     end
 
