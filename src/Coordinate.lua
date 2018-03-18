@@ -28,7 +28,7 @@ local function cubeRound(x, y, z)
         rZ = -rX - rY
     end
 
-    return x, y, z
+    return rX, rY, rZ
 end
 
 local Coordinate = {}
