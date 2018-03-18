@@ -11,6 +11,26 @@ local function isInteger(value)
     return typeof(value) == "number" and math.floor(value) == value
 end
 
+--[[
+    Rounds the cube coordinates such that the equality x + y + z = 0 remains true.
+]]
+local function cubeRound(x, y, z)
+    local rX, rY, rZ = math.floor(x), math.floor(y), math.floor(z)
+    local xDiff = math.abs(rX - x)
+    local yDiff = math.abs(rY - y)
+    local zDiff = math.abs(rZ - z)
+
+    if xDiff > yDiff and xDiff > zDiff then
+        rX = -rY - rZ
+    elseif yDiff > zDiff then
+        rY = -rX - rZ
+    else
+        rZ = -rX - rY
+    end
+
+    return x, y, z
+end
+
 local Coordinate = {}
 Coordinate.__index = Coordinate
 
@@ -32,6 +52,30 @@ function Coordinate.new(q, r)
         Q = q,
         R = r,
     }, Coordinate)
+end
+
+--[[
+    Converts pixel coordinates to q, r coordinates.
+]]
+function Coordinate.fromWorldPosition(x, y, orientation, hexSize)
+    assert(typeof(x) == "number", ("bad argument #1 to fromWorldPosition: expected number, got %q"):format(typeof(x)))
+    assert(typeof(y) == "number", ("bad argument #2 to fromWorldPosition: expected number, got %q"):format(typeof(y)))
+    assert(Coordinate.Orientation[orientation] ~= nil, "bad argument #3 to fromWorldPosition: expected an Orientation")
+    assert(typeof(hexSize) == "number", ("bad argument #4 to fromWorldPosition: expected number, got %q"):format(typeof(hexSize)))
+
+    local hexX, hexZ
+
+    if orientation == Coordinate.Orientation.PointyTop then
+        hexX = (x * math.sqrt(3) / 3 - y / 3) / hexSize,
+        hexZ = y * 2 / 3 / hexSize
+    elseif orientation == Coordinate.Orientation.FlatTop then
+        hexX = x * 2 / 3 / hexSize,
+        hexZ = (-x / 3 + math.sqrt(3) / 3 * y) / hexSize
+    end
+
+    local hexY = -hexX - hexZ
+    hexX, hexY, hexZ = cubeRound(hexX, hexY, hexZ)
+    return Coordinate.new(hexX, hexZ)
 end
 
 --[[
