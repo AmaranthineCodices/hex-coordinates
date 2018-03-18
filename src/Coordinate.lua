@@ -60,7 +60,7 @@ end
 function Coordinate.fromWorldPosition(x, y, orientation, hexSize)
     assert(typeof(x) == "number", ("bad argument #1 to fromWorldPosition: expected number, got %q"):format(typeof(x)))
     assert(typeof(y) == "number", ("bad argument #2 to fromWorldPosition: expected number, got %q"):format(typeof(y)))
-    assert(Coordinate.Orientation[orientation] ~= nil, "bad argument #3 to fromWorldPosition: expected an Orientation")
+    assert(orientation ~= nil, "bad argument #3 to fromWorldPosition: expected an Orientation")
     assert(typeof(hexSize) == "number", ("bad argument #4 to fromWorldPosition: expected number, got %q"):format(typeof(hexSize)))
 
     local hexX, hexZ
@@ -153,7 +153,7 @@ end
     Multiply the return values of this function by your hex size and add scaling as desired.
 ]]
 function Coordinate:ToWorldPosition(orientation)
-    assert(Coordinate.Orientation[orientation] ~= nil, "bad argument #1 to ToWorldPosition: expected an Orientation")
+    assert(orientation ~= nil, "bad argument #1 to ToWorldPosition: expected an Orientation")
 
     local x = self.Q * 3 / 2
     local y = (self.R + self.Q / 2) * math.sqrt(3)
