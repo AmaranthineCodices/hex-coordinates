@@ -15,7 +15,7 @@ end
     Rounds the cube coordinates such that the equality x + y + z = 0 remains true.
 ]]
 local function cubeRound(x, y, z)
-    local rX, rY, rZ = math.floor(x), math.floor(y), math.floor(z)
+    local rX, rY, rZ = math.floor(x + 0.5), math.floor(y + 0.5), math.floor(z + 0.5)
     local xDiff = math.abs(rX - x)
     local yDiff = math.abs(rY - y)
     local zDiff = math.abs(rZ - z)
@@ -63,19 +63,19 @@ function Coordinate.fromWorldPosition(x, y, orientation, hexSize)
     assert(orientation ~= nil, "bad argument #3 to fromWorldPosition: expected an Orientation")
     assert(typeof(hexSize) == "number", ("bad argument #4 to fromWorldPosition: expected number, got %q"):format(typeof(hexSize)))
 
-    local hexX, hexZ
+    local q, r
 
     if orientation == Coordinate.Orientation.PointyTop then
-        hexX = (x * math.sqrt(3) / 3 - y / 3) / hexSize
-        hexZ = y * 2 / 3 / hexSize
+        q = (x * math.sqrt(3) / 3 - y / 3) / hexSize
+        r = y * 2 / 3 / hexSize
     elseif orientation == Coordinate.Orientation.FlatTop then
-        hexX = x * 2 / 3 / hexSize
-        hexZ = (-x / 3 + math.sqrt(3) / 3 * y) / hexSize
+        q = x * (2 / 3) / hexSize
+        r = (-x / 3 + math.sqrt(3) / 3 * y) / hexSize
     end
 
-    local hexY = -hexX - hexZ
-    hexX, hexY, hexZ = cubeRound(hexX, hexY, hexZ)
-    return Coordinate.new(hexX, hexZ)
+    local hexY = -q - r
+    q, hexY, r = cubeRound(q, hexY, r)
+    return Coordinate.new(q, r)
 end
 
 --[[
